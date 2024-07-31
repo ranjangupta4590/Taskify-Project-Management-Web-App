@@ -1,34 +1,124 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Taskify : Project Management Web App
 
-## Getting Started
+Taskify is a project management web application that allows users to manage their tasks efficiently. With features like user authentication, drag-and-drop task management, and data persistence, Taskify offers a robust platform for tracking tasks across different stages of a project.
 
-First, run the development server:
+## Features
+
+1. **User Authentication**:
+   - Signup and login functionality using email and password.
+   - Secure password storage and user session management.
+
+2. **Drag and Drop Functionality**:
+   - Implement drag and drop feature to move tasks between columns.
+   - Automatically updates the task's status when moved to a different column.
+
+3. **Data Persistence**:
+   - All user data (account information and tasks) is stored in a database.
+   - Each user can only see and manage their own tasks.
+
+4. **Board Columns**:
+   - The board has four columns: "To-Do", "In Progress", "Under Review", and "Completed".
+
+## Tech Stack
+
+- **Frontend**:
+  - React.js
+  - Next.js
+  - Tailwind CSS
+  - Axios
+  - Lucide React (icons)
+
+- **Backend**:
+  - Node.js
+  - Express.js
+  - MongoDB
+  - Mongoose
+
+- **Database**:
+  - MongoDB
+
+- **Other Tools**:
+  - Docker
+  - Git & GitHub
+
+## Setup and Installation
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- MongoDB
+- Docker (optional, for containerization)
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/ranjangupta4590/Taskify-Project-Management-Web-App.git
+cd taskify
+```
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Setup Environment Variables
+
+Create a `.env` file in the root directory and add the following environment variables:
+
+```
+NEXT_PUBLIC_API_URL=http://localhost:3000
+MONGODB_URI=your_mongodb_connection_string
+```
+
+Replace `your_mongodb_connection_string` with your actual MongoDB connection string.
+
+### Run the Application
+
+To run the application in development mode:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To build and run the application in production mode:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Docker Setup (Optional)
 
-## Learn More
+To build and run the application using Docker:
 
-To learn more about Next.js, take a look at the following resources:
+1. **Build the Docker image**:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    ```bash
+    docker build -t taskify .
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+2. **Run the Docker container**:
 
-## Deploy on Vercel
+    ```bash
+    docker run -p 3000:3000 --env-file .env taskify
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### API Endpoints
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **GET /api/newTask**: Fetch all tasks.
+- **POST /api/newTask**: Create a new task.
+- **PUT /api/newTask**: Update an existing task.
+- **DELETE /api/newTask**: Delete a task.
+
+## Contributing
+
+Contributions are welcome! Please create a pull request or open an issue for any improvements or bugs.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+Feel free to adjust any sections according to your project's specifics or preferences!
