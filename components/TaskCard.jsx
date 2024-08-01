@@ -55,7 +55,6 @@ const TaskCard = ({ projects, onEdit, onDelete }) => {
   return (
     <>
       {projects.map((item) => (
-        <div>
           <Card key={item._id} className='bg-zinc-400/10 my-3'>
             <CardContent className='p-3'>
               <CardDescription>
@@ -98,8 +97,11 @@ const TaskCard = ({ projects, onEdit, onDelete }) => {
               </div>
             </CardContent>
           </Card>
+<<<<<<< HEAD
           <Toaster />
         </div>
+=======
+>>>>>>> e9ae746088286ebbd6c5c1f98d36b1737b782b9f
       ))}
     </>
   );
