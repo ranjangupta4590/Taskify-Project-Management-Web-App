@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import { useSheet } from "@/context/SheetContext";
+import { usePathname } from "next/navigation";
 
 
 const routes = [
@@ -51,6 +52,7 @@ const routes = [
 const Sidebar = () => {
     const { data: session, status } = useSession();
     const { openSheet } = useSheet();
+    const activePath =  usePathname(); 
 
     const [isMounted, setIsMounted] = useState(false);
 
@@ -89,7 +91,7 @@ const Sidebar = () => {
                             <Link
                                 href={item.href}
                                 key={item.href}
-                                className={`flex group p-2 w-full cursor-pointer hover:text-zinc-500 hover:bg-zinc-500/10 rounded-lg transition`}
+                                className={`flex group p-2 w-full cursor-pointer hover:text-zinc-500 hover:bg-zinc-500/10 rounded-lg transition ${activePath === item.href ? 'bg-zinc-500/10 text-zinc-500' : ''}`}
                             >
                                 <div className="flex items-center flex-1 pl-0">
                                     <item.icon className={`${item.color} mr-3`} />

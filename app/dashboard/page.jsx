@@ -10,7 +10,6 @@ import TaskCard from "@/components/TaskCard";
 import ToDo from "@/components/ToDo";
 import UnderReview from "@/components/UnderReview";
 import { DragDropContext } from '@hello-pangea/dnd';
-import { TaskProvider } from '@/context/TaskContext';
 
 const baseUrl =process.env.NEXT_PUBLIC_API_URL;
 
