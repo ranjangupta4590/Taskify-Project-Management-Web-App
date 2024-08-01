@@ -1,4 +1,5 @@
 "use client"
+import { getSession, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useSheet } from "@/context/SheetContext";
 import { useTasks } from "@/context/TaskContext";
@@ -22,9 +23,12 @@ import { format } from "date-fns";
 import axios from 'axios';
 import { toast, Toaster } from 'react-hot-toast';
 
+const baseUrl = process.env.NEXT_PUBLIC_API_URL; 
+
 const AddSheet = () => {
     const { isSheetOpen, closeSheet, initialStatus, initialTask } = useSheet();
     const { addTask, updateTask } = useTasks();
+    const { data: session } = useSession();
 
     const [title, setTitle] = useState('');
     const [status, setStatus] = useState(initialStatus || '');
@@ -99,10 +103,80 @@ const AddSheet = () => {
         setSelectedDate(new Date());
     };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+
+    //     try {
+    //         const taskData = {
+    //             title,
+    //             status,
+    //             priority,
+    //             deadline,
+    //             description
+    //         };
+
+    //         // if (initialTask?._id) {
+    //         //     // Update existing task
+    //         //     await axios.put('/api/newTask', { ...taskData, id: initialTask._id });
+    //         // } else {
+    //         //     // Create new task
+    //         //     await axios.post('/api/newTask', taskData);
+    //         // }
+            
+    //         let response;
+    //         if (initialTask?._id) {
+    //             // Update existing task
+    //             response = await axios.put(`/api/newTask`, { ...taskData, id: initialTask._id });
+    //             updateTask(response.data);
+    //             toast.success('Task updated successfully!', {
+    //                 style: {
+    //                     background: 'green',
+    //                     color: 'white',
+    //                 },
+    //             });
+    //         } else {
+    //             // Create new task
+    //             response = await axios.post('/api/newTask', taskData);
+    //             addTask(response.data);
+    //             toast.success('Task created successfully!', {
+    //                 style: {
+    //                     background: 'green',
+    //                     color: 'white',
+    //                 },
+    //             });
+    //         }
+
+    //         resetForm();
+    //         closeSheet();
+    //         // window.location.reload();
+    //         setTimeout(() => {
+    //             window.location.reload();
+    //           }, 1000);
+    //     } catch (error) {
+    //         console.error('Failed to save task:', error);
+    //         toast.error('Failed to save task', {
+    //             style: {
+    //                 background: 'red',
+    //                 color: 'white',
+    //             },
+    //         });
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
+        if (!session) {
+            console.error('No active session found. User might be logged out.');
+            return;
+        }
+    
         setLoading(true);
-
+    
         try {
             const taskData = {
                 title,
@@ -111,56 +185,37 @@ const AddSheet = () => {
                 deadline,
                 description
             };
-
-            // if (initialTask?._id) {
-            //     // Update existing task
-            //     await axios.put('/api/newTask', { ...taskData, id: initialTask._id });
-            // } else {
-            //     // Create new task
-            //     await axios.post('/api/newTask', taskData);
-            // }
-            
+    
             let response;
             if (initialTask?._id) {
                 // Update existing task
-                response = await axios.put(`/api/newTask`, { ...taskData, id: initialTask._id });
-                updateTask(response.data);
-                toast.success('Task updated successfully!', {
-                    style: {
-                        background: 'green',
-                        color: 'white',
-                    },
-                });
+                response = await axios.put('/api/newTask', { ...taskData, id: initialTask._id });
+                updateTask(response.data.data);
+                toast.success('Task updated successfully!');
             } else {
                 // Create new task
                 response = await axios.post('/api/newTask', taskData);
-                addTask(response.data);
-                toast.success('Task created successfully!', {
-                    style: {
-                        background: 'green',
-                        color: 'white',
-                    },
-                });
+                addTask(response.data.data);
+                toast.success('Task created successfully!');
             }
-
+    
             resetForm();
             closeSheet();
-            // window.location.reload();
             setTimeout(() => {
                 window.location.reload();
-              }, 1000);
+            }, 1000);
         } catch (error) {
             console.error('Failed to save task:', error);
-            toast.error('Failed to save task', {
-                style: {
-                    background: 'red',
-                    color: 'white',
-                },
-            });
+            toast.error('Failed to save task');
         } finally {
             setLoading(false);
         }
     };
+    
+    
+
+
+
 
 
 

@@ -6,6 +6,7 @@ const TaskSchema = new mongoose.Schema({
     priority: { type: String, default: 'Low' },
     deadline: { type: Date },
     description: { type: String },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });
 
 const Task = mongoose.models.Task || mongoose.model('Task', TaskSchema);

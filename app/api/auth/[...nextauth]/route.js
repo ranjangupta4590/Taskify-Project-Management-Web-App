@@ -49,7 +49,7 @@ export const authOptions = {
 
       if (user) {
         session.user.image = getGravatarUrl(user.email); // Use Gravatar URL
-        // console.log("Session user:", session.user); // Log the session user
+        session.user.id = user._id.toString();
       }
 
       return session;
@@ -57,6 +57,7 @@ export const authOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.email = user.email; // Store email in the token
+        token.id = user._id.toString();
       }
 
       return token;
