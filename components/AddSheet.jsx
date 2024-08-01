@@ -145,7 +145,10 @@ const AddSheet = () => {
 
             resetForm();
             closeSheet();
-            window.location.reload();
+            // window.location.reload();
+            setTimeout(() => {
+                window.location.reload();
+              }, 1000);
         } catch (error) {
             console.error('Failed to save task:', error);
             toast.error('Failed to save task', {

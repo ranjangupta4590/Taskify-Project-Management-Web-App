@@ -40,7 +40,10 @@ const TaskCard = ({ projects, onEdit, onDelete }) => {
           color: 'white',
         },
       });
-      window.location.reload();
+      // window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error('Failed to delete task:', error);
       toast.error('Failed to save task', {
@@ -97,12 +100,9 @@ const TaskCard = ({ projects, onEdit, onDelete }) => {
               </div>
             </CardContent>
           </Card>
-<<<<<<< HEAD
-          <Toaster />
-        </div>
-=======
->>>>>>> e9ae746088286ebbd6c5c1f98d36b1737b782b9f
+          
       ))}
+      <Toaster/>
     </>
   );
 };
