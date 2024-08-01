@@ -1,11 +1,13 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader } from './ui/card';
+import axios from 'axios';
 import { ClipboardPenLine, Clock3, Trash2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import axios from 'axios';
+import { toast, Toaster } from 'react-hot-toast';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from './ui/tooltip';
+import { Card, CardContent, CardDescription } from './ui/card';
 
-const TaskCard = ({ projects , onEdit, onDelete}) => {
+const TaskCard = ({ projects, onEdit, onDelete }) => {
 
   if (!projects || projects.length === 0) {
     return <p>No tasks available.</p>; // Return a message if tasks are not available
@@ -32,8 +34,21 @@ const TaskCard = ({ projects , onEdit, onDelete}) => {
     try {
       await axios.delete(`/api/newTask`, { data: { id } });
       if (onDelete) onDelete(id);
+      toast.success('Task Deleted successfully!', {
+        style: {
+          background: 'green',
+          color: 'white',
+        },
+      });
+      window.location.reload();
     } catch (error) {
       console.error('Failed to delete task:', error);
+      toast.error('Failed to save task', {
+        style: {
+          background: 'red',
+          color: 'white',
+        },
+      });
     }
   };
 
@@ -54,13 +69,36 @@ const TaskCard = ({ projects , onEdit, onDelete}) => {
                   <p className='text-zinc-400 text-xs text-left mt-3'>{formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}</p>
                 </div>
                 <div className='flex gap-2 text-zinc-600'>
-                
-                <button onClick={() => handleEdit(item)}><ClipboardPenLine className='h-4 w-4 mt-3 '/></button>
-                <button onClick={() => handleDelete(item._id)}><Trash2 className='h-4 w-4 mt-3'/></button>
+
+                  {/* <button data-tip="Edit Task" onClick={() => handleEdit(item)}><ClipboardPenLine className='h-4 w-4 mt-3 ' /></button>
+                  <button data-tip="Delete Task" onClick={() => handleDelete(item._id)}><Trash2 className='h-4 w-4 mt-3' /></button> */}
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <button onClick={() => handleEdit(item)}>
+                          <ClipboardPenLine className='h-4 w-4 mt-3' />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent className='text-white'>
+                        <p>Edit Task</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <button onClick={() => handleDelete(item._id)}>
+                          <Trash2 className='h-4 w-4 mt-3' />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent className='text-white'>
+                        <p>Delete Task</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
               </div>
             </CardContent>
           </Card>
+          <Toaster />
         </div>
       ))}
     </>

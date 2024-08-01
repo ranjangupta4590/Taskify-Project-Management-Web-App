@@ -1,13 +1,15 @@
 "use client"
-import { CalendarDays, CalendarIcon, InfoIcon, MoveDiagonal2, Pencil, PlusIcon, Share2, Star, Sun } from "lucide-react";
-import { Button } from "./ui/button";
-import { Sheet, SheetContent, SheetHeader } from "./ui/sheet";
 import { useEffect, useState } from "react";
 import { useSheet } from "@/context/SheetContext";
+import { useTasks } from "@/context/TaskContext";
+
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Calendar } from "./ui/calendar";
+import { Button } from "./ui/button";
+import { Sheet, SheetContent, SheetHeader } from "./ui/sheet";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { CalendarDays, CalendarIcon, InfoIcon, MoveDiagonal2, Pencil, PlusIcon, Share2, Star, Sun } from "lucide-react";
 import {
     Select,
     SelectContent,
@@ -18,9 +20,11 @@ import {
 
 import { format } from "date-fns";
 import axios from 'axios';
+import { toast, Toaster } from 'react-hot-toast';
 
 const AddSheet = () => {
-    const { isSheetOpen, closeSheet, initialStatus,initialTask } = useSheet();
+    const { isSheetOpen, closeSheet, initialStatus, initialTask } = useSheet();
+    const { addTask, updateTask } = useTasks();
 
     const [title, setTitle] = useState('');
     const [status, setStatus] = useState(initialStatus || '');
@@ -39,7 +43,7 @@ const AddSheet = () => {
     useEffect(() => {
         setStatus(initialStatus);
     }, [initialStatus]);
-    
+
     useEffect(() => {
         if (initialTask) {
             setTitle(initialTask.title || '');
@@ -108,18 +112,48 @@ const AddSheet = () => {
                 description
             };
 
+            // if (initialTask?._id) {
+            //     // Update existing task
+            //     await axios.put('/api/newTask', { ...taskData, id: initialTask._id });
+            // } else {
+            //     // Create new task
+            //     await axios.post('/api/newTask', taskData);
+            // }
+            
+            let response;
             if (initialTask?._id) {
                 // Update existing task
-                await axios.put('/api/newTask', { ...taskData, id: initialTask._id });
+                response = await axios.put(`/api/newTask`, { ...taskData, id: initialTask._id });
+                updateTask(response.data);
+                toast.success('Task updated successfully!', {
+                    style: {
+                        background: 'green',
+                        color: 'white',
+                    },
+                });
             } else {
                 // Create new task
-                await axios.post('/api/newTask', taskData);
+                response = await axios.post('/api/newTask', taskData);
+                addTask(response.data);
+                toast.success('Task created successfully!', {
+                    style: {
+                        background: 'green',
+                        color: 'white',
+                    },
+                });
             }
 
             resetForm();
             closeSheet();
+            window.location.reload();
         } catch (error) {
             console.error('Failed to save task:', error);
+            toast.error('Failed to save task', {
+                style: {
+                    background: 'red',
+                    color: 'white',
+                },
+            });
         } finally {
             setLoading(false);
         }
@@ -296,6 +330,7 @@ const AddSheet = () => {
                     </form>
                 </SheetContent>
             </Sheet>
+            <Toaster />
         </div>
     );
 };

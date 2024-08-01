@@ -10,7 +10,7 @@ import TaskCard from "@/components/TaskCard";
 import ToDo from "@/components/ToDo";
 import UnderReview from "@/components/UnderReview";
 import { DragDropContext } from '@hello-pangea/dnd';
-import DragDropProvider from '@/context/DragDropContext';
+import { TaskProvider } from '@/context/TaskContext';
 
 const baseUrl =process.env.NEXT_PUBLIC_API_URL;
 
@@ -34,7 +34,7 @@ export default function Dashboard() {
     fetchTasks();
   }, []);
 
-  //Filter on basis od status
+  //Filter on basis of status
   const toDoTasks = tasks.filter(task => task.status === 'todo');
   const inProgressTasks = tasks.filter(task => task.status === 'inprogress');
   const underReviewTasks = tasks.filter(task => task.status === 'underreview');
@@ -76,6 +76,7 @@ export default function Dashboard() {
       <div className="mt-5 md:pl-64">
         <div className="mx-5 bg-white rounded-md  p-3">
         
+        
         <DragDropContext onDragEnd={handleDragEnd}>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 ">
               <div>
@@ -92,24 +93,7 @@ export default function Dashboard() {
               </div>
             </div>
           </DragDropContext>
-   
-        
-        
-          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 ">
-            <div>
-              <ToDo tasks={toDoTasks} title="To do" />
-            </div>
-            <div>
-              <InProgress tasks={inProgressTasks} title="In progress" />
-            </div>
-            <div>
-              <UnderReview tasks={underReviewTasks} title="Under review" />
-            </div>
-            <div>
-              <Finished tasks={finishedTasks} title="Finished" />
-            </div>
-          </div> */}
-          {/* <TaskCard tasks={tasks}/> */}
+          
         </div>
       </div>
     </div>

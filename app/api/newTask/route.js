@@ -91,6 +91,10 @@ export async function PUT(req) {
     await connectMongoDB();
     try {
         const { id, title, status, priority, deadline, description } = await req.json();
+        
+        const capitalizeFirstLetter = (string) => {
+            return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+        };
 
         if (!ObjectId.isValid(id)) {
             return NextResponse.json(
@@ -110,7 +114,7 @@ export async function PUT(req) {
 
         task.title = title;
         task.status = status;
-        task.priority = priority;
+        task.priority = capitalizeFirstLetter(priority);
         task.deadline = deadline;
         task.description = description;
 
